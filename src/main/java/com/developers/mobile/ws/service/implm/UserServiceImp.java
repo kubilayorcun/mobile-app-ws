@@ -7,6 +7,8 @@ import com.developers.mobile.ws.service.UserService;
 import com.developers.mobile.ws.shared.dto.UserDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +42,10 @@ public class UserServiceImp implements UserService {
         BeanUtils.copyProperties(storedUserDetails, returnUser);
 
         return returnUser;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return null;
     }
 }
