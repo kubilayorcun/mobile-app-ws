@@ -27,6 +27,8 @@ public class UserServiceImp implements UserService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
+
     @Override
     public UserDto getUser(String email) {
         UserEntity userEntity = userRepository.findByEmail(email);
@@ -60,6 +62,19 @@ public class UserServiceImp implements UserService {
         BeanUtils.copyProperties(storedUserDetails, returnUser);
 
         return returnUser;
+    }
+
+    @Override
+    public UserDto getUserByUserId(String id) {
+        UserEntity userEntity = userRepository.findByUserId(id);
+
+        if(userEntity == null){
+            throw new UsernameNotFoundException(id);
+        }
+
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userEntity , userDto);
+        return userDto;
     }
 
     @Override

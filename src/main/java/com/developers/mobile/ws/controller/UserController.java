@@ -8,22 +8,35 @@ import com.fasterxml.jackson.databind.util.BeanUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
+
 @RestController
-@RequestMapping("users") // :8080/users...
+@RequestMapping("users")
 public class UserController {
 
     @Autowired
     UserService userService;
 
-    @GetMapping
-    public String getUser(){
-
-        return "getUser() called";
+    @GetMapping(path = "/{id}",
+                produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public UserRest getUser(@PathVariable String id){
+        try {
+            UserRest user = new UserRest();
+            UserDto userDto = userService.getUserByUserId(id);
+            BeanUtils.copyProperties(userDto , user);
+            return user;
+        }
+        catch (Exception e){
+            throw e;
+        }
     }
 
-    @PostMapping
+    @PostMapping(consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
+                 produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails){
         UserRest userResponse = new UserRest();
         UserDto userDto = new UserDto();
